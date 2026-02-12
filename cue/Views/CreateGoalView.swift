@@ -15,21 +15,21 @@ struct CreateGoalView: View {
     
     @State private var content: String = ""
     @State private var reason: String = ""
-    
-    // Use the SwiftData context
+
+    @FocusState private var isContentFocused: Bool
+
     @Environment(\.modelContext) private var context
-    
-    // Use the service we made
-    private var service: GoalService {
-        // Pass the context
+
+    private func getService() -> GoalService {
         GoalService(context: context)
     }
-    
+
     var body: some View {
         NavigationStack {
             Form {
                 Section("What's your goal?") {
-                    TextField("I want to...", text: $content) // Bind content
+                    TextField("I want to...", text: $content)
+                        .focused($isContentFocused)
                 }
                 Section("Why does it matter?") {
                     TextField("Because...", text: $reason)
@@ -42,7 +42,11 @@ struct CreateGoalView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        _ = service.create(content: content, reason: reason)
+                        if let goal = goalToEdit {
+                            getService().edit(goal, content: content, reason: reason)
+                        } else {
+                            _ = getService().create(content: content, reason: reason)
+                        }
                         dismiss()
                     }
                     .disabled(content.isEmpty || reason.isEmpty)
@@ -54,6 +58,8 @@ struct CreateGoalView: View {
                 content = goal.content
                 reason = goal.reason
             }
+            // Auto-focus content field
+            isContentFocused = true
         }
     }
 }

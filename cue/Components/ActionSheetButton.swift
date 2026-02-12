@@ -11,6 +11,7 @@ struct ActionSheetButton: View {
     let label: String
     let icon: String
     var isDestructive: Bool = false
+    var isDisabled: Bool = false
     let action: () -> Void
     
     var body: some View {
@@ -24,9 +25,13 @@ struct ActionSheetButton: View {
                 Text(label)
                 Spacer()
             }
-            .foregroundStyle(isDestructive ? Color.red : Color.white)
+            .foregroundStyle(
+                isDisabled ? Color.gray.opacity(0.5) :
+                isDestructive ? Color.red : Color.white
+            )
             .padding(.vertical)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .disabled(isDisabled)
     }
 }

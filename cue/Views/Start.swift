@@ -24,6 +24,7 @@ struct Start: View {
             
             (
                 Text("What do you want to get ")
+                // The + operator lets you combine like components
                 + Text("done")
                     .bold()
                     .foregroundStyle(Color.brandGreen)

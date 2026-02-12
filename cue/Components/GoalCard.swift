@@ -57,17 +57,19 @@ struct GoalCard: View {
                 .padding(.bottom, 4)
             
             // Streak Badge (could be decomposed, but simple enough to leave here
-            HStack(spacing: 2) {
-                Image(systemName: "bolt.shield.fill")
-                    .foregroundStyle(Color.white)
-                Text("\(goal.calculateStreak()) day streak")
-                    .font(.caption)
+            if goal.calculateStreak() > 0 {
+                HStack(spacing: 2) {
+                    Image(systemName: "bolt.shield.fill")
+                        .foregroundStyle(Color.white)
+                    Text("\(goal.calculateStreak()) day streak")
+                        .font(.caption)
+                }
+                .padding(.vertical, 2)
+                .padding(.trailing, 8)
+                .padding(.leading, 4)
+                .background(Color.brandGreen)
+                .clipShape(.capsule)
             }
-            .padding(.vertical, 2)
-            .padding(.trailing, 8)
-            .padding(.leading, 4)
-            .background(Color.brandGreen)
-            .clipShape(.capsule)
 
             // Spacer is roughly like justify-space-between, fills available space
             Spacer()
