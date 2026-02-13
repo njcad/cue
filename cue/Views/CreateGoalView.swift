@@ -11,13 +11,16 @@ struct CreateGoalView: View {
     // Optionally accept an existing goal to EDIT rather than create
     var goalToEdit: GoalModel?
     
+    // Access dismiss var from environment. SwiftUI automatically provides a dismiss for any presented view
     @Environment(\.dismiss) private var dismiss
     
     @State private var content: String = ""
     @State private var reason: String = ""
 
+    // To focus entry
     @FocusState private var isContentFocused: Bool
 
+    // Grab the model context from cueApp main
     @Environment(\.modelContext) private var context
 
     private func getService() -> GoalService {
@@ -35,6 +38,7 @@ struct CreateGoalView: View {
                     TextField("Because...", text: $reason)
                 }
             }
+            // Conditionally render the title
             .navigationTitle(goalToEdit != nil ? "Edit goal" : "New goal")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

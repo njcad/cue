@@ -20,6 +20,7 @@ struct VerticalPager: View {
     var body: some View {
         GeometryReader { geometry in
             ScrollView(.vertical) {
+                // LazyVStack will only render as necessary
                 LazyVStack(spacing: 0) {
                     ForEach(goals) { goal in
                         GoalView(goal: goal)

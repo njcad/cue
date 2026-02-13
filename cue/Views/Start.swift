@@ -18,7 +18,6 @@ struct Start: View {
         isShowingCreateSheet = true
     }
     
-    
     var body: some View {
         VStack {
             

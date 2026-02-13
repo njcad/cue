@@ -45,9 +45,9 @@ struct GoalCard: View {
                     Image(systemName: "ellipsis")
                         .foregroundStyle(Color.gray)
                         // Make tappable area bigger than just ellipsis itself
-                        .padding(12)
-                        .contentShape(Rectangle())
-                        .padding(-12)
+                        .padding(12) // Expand tappable area out
+                        .contentShape(Rectangle()) // Make the whole shape a rectangular tap zone
+                        .padding(-12) // But––collapse visual area back in so we still get tap zone without seeing it take up space
                 }
             }
             
@@ -68,10 +68,10 @@ struct GoalCard: View {
                 .padding(.trailing, 8)
                 .padding(.leading, 4)
                 .background(Color.brandGreen)
-                .clipShape(.capsule)
+                .clipShape(.capsule) // God this is so handy thanks SwiftUI
             }
 
-            // Spacer is roughly like justify-space-between, fills available space
+            // Spacer is roughly like justify-space-between, fills available space (here, vertically)
             Spacer()
             Text("Your reason")
                 .font(.caption)
