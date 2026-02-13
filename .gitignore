@@ -1,0 +1,9 @@
+# Xcode user-specific files
+xcuserdata/
+xcshareddata/
+
+# macOS
+.DS_Store
+
+# Secrets
+*.env
