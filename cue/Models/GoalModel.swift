@@ -45,7 +45,7 @@ final class GoalModel {
 
         // Normalize and dedup completion dates
         let normalizedDates = Set(completedDates.map {
-            calendar.startOfDay(for: $0)
+            calendar.startOfDay(for: $0) // $0 uses the first parameter of the closure, so it's here date in these completed dates
         })
 
         // Determine starting point:

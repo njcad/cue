@@ -8,43 +8,42 @@
 import SwiftUI
 
 // This <> syntax allows us to pass any View as Content parameter
+// We call it from GoalView and pass in a VStack of ActionSheetButtons
 struct ActionSheet<Content: View>: View {
-    // Track state of sheet's presentation binded with caller
+    // Track state of sheet's presentation binded with caller (GoalView)
     @Binding var isShowing: Bool
     
-    // Receive content to display
+    // Receive content to display. ViewBuilder allows us to receive a view as a param
     @ViewBuilder let content: () -> Content
     
-    //
+    // Track the dragOffset of the sheet
     @State private var dragOffset: CGFloat = 0
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            // Backdrop
+            // Backdrop: dim the background of the app
             if isShowing {
                 Color.black.opacity(0.5)
                     .ignoresSafeArea()
-                    .onTapGesture { dismiss() }
+                    .onTapGesture { dismiss() } // To close the sheet
                     .transition(.opacity)
             }
 
-            // Sheet itself
+            // Sheet itself (defined below)
             if isShowing {
                 sheet
                     .transition(.move(edge: .bottom))
                     .offset(y: dragOffset)
-                    .gesture(dragGesture)
+                    .gesture(dragGesture) // Defined below
             }
         }
+        // Again, inside out. Give it full screen size
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .ignoresSafeArea()
+        
+        // Animate in and animate drag behavior with spring
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isShowing)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: dragOffset)
-        .onChange(of: isShowing) { _, newValue in
-            if newValue {
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-            }
-        }
     }
     
     // Sheet content
@@ -60,7 +59,7 @@ struct ActionSheet<Content: View>: View {
             // The actions
             content()
                 .padding(.horizontal, 20)
-                .padding(.bottom, 34)
+                .padding(.bottom, 34) // A little hacky. Probably a safer way to manage this with the bottom of screen
         }
         .frame(maxWidth: .infinity)
         .background(
@@ -69,7 +68,7 @@ struct ActionSheet<Content: View>: View {
                 .ignoresSafeArea(edges: .bottom)
         )
         .clipShape(
-            // Only round the top corners
+            // Only round the top corners. Just a RoundedRectangle but you can set the radii differently
             UnevenRoundedRectangle(
                 topLeadingRadius: 24,
                 bottomLeadingRadius: 0,
@@ -83,6 +82,7 @@ struct ActionSheet<Content: View>: View {
         DragGesture()
             .onChanged { value in
                 // Only allow dragging down (positive values)
+                // Future improvement: allow dragging up with more actions, like Spotify
                 if value.translation.height > 0 {
                     dragOffset = value.translation.height
                 }
@@ -92,7 +92,7 @@ struct ActionSheet<Content: View>: View {
                 if value.translation.height > 100 || value.velocity.height > 500 {
                     dismiss()
                 } else {
-                    dragOffset = 0
+                    dragOffset = 0 // Always reset to initial point
                 }
             }
     }

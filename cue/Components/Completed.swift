@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// For use animated in after SliderButton is marked complete
 struct Completed: View {
     var body: some View {
         HStack {
